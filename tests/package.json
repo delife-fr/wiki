@@ -1,0 +1,9 @@
+{
+  "name": "wiki-tests",
+  "private": true,
+  "description": "Tests de l'appli dans Chromium (Playwright) avec un faux api.github.com. Lancer : tests/lancer.sh",
+  "devDependencies": {
+    "@octokit/graphql-schema": "15.26.1",
+    "graphql": "16.11.0"
+  }
+}

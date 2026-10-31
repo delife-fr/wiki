@@ -1,0 +1,26 @@
+const { chromium } = require('playwright');
+const URL0 = process.env.WIKI_URL || 'http://127.0.0.1:8765/';
+const ok = (c, m) => { if (!c) throw new Error('ÉCHEC : ' + m); console.log('✓ ' + m); };
+(async () => {
+  const b = await chromium.launch();
+  const ctx = await b.newContext();
+  const p = await ctx.newPage();
+  const erreurs = []; p.on('pageerror', e => erreurs.push(e.message));
+  await p.goto(URL0);
+  await p.click('#essayer-demo');
+  await p.waitForSelector('text=démo du wiki');
+  await p.evaluate(() => navigator.serviceWorker.ready);
+  await p.waitForFunction(() => !!navigator.serviceWorker.controller);
+  ok(true, 'service worker actif');
+  await p.waitForTimeout(500);
+  await ctx.setOffline(true);
+  await p.reload();
+  await p.waitForSelector('text=démo du wiki', {timeout: 15000});
+  ok(true, 'sans réseau : l’appli s’ouvre depuis la copie du service worker');
+  await p.goto(URL0 + '#/page/Voyage_en_Islande');
+  await p.waitForSelector('.encadre');
+  ok(true, 'sans réseau : navigation entre les pages');
+  ok(!(await p.isVisible('#mise-a-jour')), 'pas de bandeau de mise à jour sans changement de version');
+  ok(erreurs.length === 0, 'aucune erreur : ' + erreurs.join(' | '));
+  await b.close();
+})().catch(e => { console.error(e.message); process.exit(1); });
