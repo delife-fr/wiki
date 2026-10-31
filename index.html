@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data: https:; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f8f9fa">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Wiki">
+  <meta name="description" content="Wiki personnel : le contenu reste dans un dépôt GitHub privé.">
+  <title>Wiki</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icones/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icones/icone-180.png">
+  <link rel="stylesheet" href="css/wiki.css">
+  <link rel="modulepreload" href="vendor/bibliotheques.js">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="entete">
+    <button type="button" id="bouton-menu" aria-label="Menu" aria-controls="menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+    </button>
+    <a class="logo" href="#/" aria-label="Wiki — accueil">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#3366cc"/><path d="M13 19l8.5 27L32 24l10.5 22L51 19" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="nom">Wiki<small>Ma vie</small></span>
+    </a>
+    <form id="form-recherche" role="search" autocomplete="off">
+      <svg class="loupe" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="recherche" type="search" placeholder="Rechercher dans le wiki" aria-label="Rechercher dans le wiki" aria-autocomplete="list" aria-controls="suggestions" enterkeyhint="search">
+      <button type="submit">Rechercher</button>
+      <ul id="suggestions" role="listbox" hidden></ul>
+    </form>
+    <nav class="entete-droite" aria-label="Raccourcis">
+      <a href="#/special/nouvelle">Nouvelle page</a>
+      <a href="#/reglages">Réglages</a>
+    </nav>
+  </header>
+
+  <div class="page">
+    <nav id="menu" aria-label="Menu principal">
+      <h2>Navigation</h2>
+      <ul>
+        <li><a href="#/">Accueil</a></li>
+        <li><a href="#/special/pages">Toutes les pages</a></li>
+        <li><a href="#/special/categories">Catégories</a></li>
+        <li><a href="#/special/recentes">Modifications récentes</a></li>
+        <li><a href="#/special/hasard">Page au hasard</a></li>
+      </ul>
+      <h2>Contribuer</h2>
+      <ul>
+        <li><a href="#/special/nouvelle">Nouvelle page</a></li>
+        <li><a href="#/special/demandees">Pages demandées</a></li>
+        <li><a href="#/special/orphelines">Pages orphelines</a></li>
+        <li><a href="#/aide">Aide</a></li>
+      </ul>
+      <h2>Wiki</h2>
+      <ul>
+        <li><a href="#/reglages">Réglages</a></li>
+      </ul>
+      <div id="statut" role="status" aria-live="polite"></div>
+    </nav>
+    <div id="voile"></div>
+    <main id="contenu">
+      <noscript><p>Ce wiki a besoin de JavaScript.</p></noscript>
+    </main>
+  </div>
+  <footer class="pied">Wiki personnel. Le contenu reste dans ton dépôt GitHub privé et sur cet appareil.</footer>
+
+  <div id="visionneuse" hidden tabindex="-1" role="dialog" aria-label="Photo en grand"><img alt=""><div class="legende"></div></div>
+  <div id="toasts"></div>
+  <div id="mise-a-jour" hidden>Nouvelle version du wiki. <button type="button" class="bouton principal">Recharger</button></div>
+</body>
+</html>
