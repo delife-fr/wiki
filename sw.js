@@ -1,11 +1,11 @@
-/* WIKI — service worker (version 1.0.0)
+/* WIKI — service worker (version 1.1.0)
    Permet d'installer le wiki comme une appli et de l'ouvrir sans réseau.
    · Fichiers de l'appli (même site) : le réseau d'abord, pour avoir toujours la dernière version ; sans réseau,
      ou si le réseau ne répond pas en 3 secondes, la copie gardée. La copie est remise à jour à chaque réponse.
    · GitHub (api.github.com) et tout autre site : jamais interceptés. Le contenu du wiki est gardé par l'appli
      elle-même (IndexedDB), pas ici.
    · À chaque nouvelle version de l'appli, changer VERSION ci-dessous (et dans js/reglages.js). */
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const CACHE = 'wiki-' + VERSION;
 const FICHIERS = ['./', './index.html', './manifest.webmanifest', './css/wiki.css', './vendor/bibliotheques.js',
   './js/app.js', './js/aide.js', './js/analyse.js', './js/demo.js', './js/depot.js', './js/diff.js', './js/editeur.js',

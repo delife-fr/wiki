@@ -5,7 +5,7 @@ import {SourceDemo} from './demo.js';
 import {Depot} from './depot.js';
 import {suggestions} from './recherche.js';
 import {esc, heure, lienPage, decoderTitre} from './outils.js';
-import {reglages, appliquerTheme} from './reglages.js';
+import {reglages, enregistrerReglages, appliquerTheme} from './reglages.js';
 import * as vues from './vues.js';
 import {vueModifier} from './editeur.js';
 
@@ -73,8 +73,9 @@ async function rendreRoute() {
   app.route = r;
   if (app.vue?.quitter) app.vue.quitter();
   app.vue = null;
-  document.body.classList.remove('menu-ouvert');
+  if (document.body.classList.contains('menu-ouvert')) ouvrirMenu(false);
   fermerSuggestions();
+  $('#form-recherche').classList.remove('ouverte');
   const d = app.depot;
   const ctx = {depot: d, main, annoncer, aller, route: r, demarrerDepot};
   try {
@@ -125,9 +126,25 @@ function marquerMenu() {
 
 /* ---------------------------------------------------------------- état de synchronisation */
 
+/* Pictogrammes de l'indicateur d'état (bouton rond de la barre, comme dans LIFE PANEL) */
+const svg = d => `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const ICONES_ETAT = {
+  ok: svg('<path d="M5 12.5l4.2 4.2L19 7"/>'),
+  sync: svg('<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.6 3.5v3.6H15M5.4 20.5v-3.6H9"/>'),
+  'hors-ligne': svg('<path d="M3 3l18 18"/><path d="M8.5 5.6A6.5 6.5 0 0 1 18 10.6a4.3 4.3 0 0 1 2.3 6.6M17 19H7a4.5 4.5 0 0 1-1-8.9"/>'),
+  erreur: svg('<circle cx="12" cy="12" r="8.6"/><path d="M12 7.8v5M12 16.2v.1"/>'),
+  demo: svg('<path d="M4.5 19.5v-15A2.5 2.5 0 0 1 7 2h12.5v20H7a2.5 2.5 0 0 1 0-5h12.5"/>'),
+  attente: svg('<circle cx="12" cy="12" r="8.6"/>'),
+};
+
 function majStatut() {
-  const el = $('#statut'), d = app.depot;
-  if (!d) { el.innerHTML = ''; el.dataset.etat = ''; return; }
+  const el = $('#statut'), bouton = $('#etat'), d = app.depot;
+  if (!d) {
+    el.innerHTML = ''; el.dataset.etat = '';
+    bouton.dataset.etat = ''; bouton.innerHTML = ICONES_ETAT.attente;
+    bouton.title = 'Aucun dépôt connecté : ouvrir les réglages'; bouton.setAttribute('aria-label', bouton.title);
+    return;
+  }
   const s = d.statut, quand = d.derniereSync ? heure(d.derniereSync) : '';
   const textes = {
     attente: 'Ouverture…',
@@ -136,10 +153,46 @@ function majStatut() {
     'hors-ligne': `Hors ligne${quand ? ' · copie de ' + quand : ''}`,
     erreur: s.message || 'Erreur',
   };
+  const texte = textes[s.etat] || '';
   el.dataset.etat = s.etat;
-  el.innerHTML = `<span class="pastille" aria-hidden="true"></span><span class="texte">${esc(textes[s.etat] || '')}</span>
+  el.innerHTML = `<span class="led" aria-hidden="true"></span><span class="texte">${esc(texte)}</span>
     ${s.etat !== 'sync' && !d.source.local ? '<button type="button" class="lien" id="actualiser">Actualiser</button>' : ''}`;
-  $('#actualiser')?.addEventListener('click', () => d.synchroniser().catch(e => annoncer(e.message, 'erreur')));
+  $('#actualiser')?.addEventListener('click', actualiser);
+  const etat = d.source.local && s.etat === 'ok' ? 'demo' : s.etat;
+  if (bouton.dataset.etat !== etat) { bouton.dataset.etat = etat; bouton.innerHTML = ICONES_ETAT[etat] || ICONES_ETAT.attente; }
+  bouton.title = texte + (s.etat !== 'sync' && !d.source.local ? ' — appuyer pour actualiser' : '');
+  bouton.setAttribute('aria-label', bouton.title);
+}
+
+function actualiser() {
+  const d = app.depot;
+  if (!d) { aller('#/reglages'); return; }
+  if (d.source.local) { annoncer('Démo : les pages sont sur cet appareil.'); return; }
+  d.synchroniser()
+    .then(change => annoncer(change ? 'Wiki mis à jour.' : 'Le wiki est à jour.', 'succes', 2500))
+    .catch(e => annoncer(e.message, 'erreur', 6000));
+}
+
+/* ---------------------------------------------------------------- thème et menu */
+
+function majBoutonTheme() {
+  const clair = document.documentElement.dataset.theme === 'clair';
+  const b = $('#bouton-theme'), t = clair ? 'Passer au thème sombre' : 'Passer au thème clair';
+  b.title = t; b.setAttribute('aria-label', t);
+}
+
+function basculerTheme() {
+  const r = reglages();
+  r.theme = r.theme === 'clair' ? 'sombre' : 'clair';
+  enregistrerReglages(r);
+  appliquerTheme(r.theme);
+  majBoutonTheme();
+}
+
+function ouvrirMenu(ouvert) {
+  document.body.classList.toggle('menu-ouvert', ouvert);
+  $('#bouton-menu').setAttribute('aria-expanded', String(ouvert));
+  if (ouvert) $('#menu a.actif, #menu a')?.focus({preventScroll: true});
 }
 
 /* ---------------------------------------------------------------- recherche (en-tête) */
@@ -172,8 +225,19 @@ function validerRecherche() {
 
 function brancher() {
   window.addEventListener('hashchange', rendreRoute);
-  $('#bouton-menu').addEventListener('click', () => document.body.classList.toggle('menu-ouvert'));
-  $('#voile').addEventListener('click', () => document.body.classList.remove('menu-ouvert'));
+  $('#bouton-menu').addEventListener('click', () => ouvrirMenu(!document.body.classList.contains('menu-ouvert')));
+  $('#voile').addEventListener('click', () => ouvrirMenu(false));
+  $('#fermer-menu').addEventListener('click', () => ouvrirMenu(false));
+  $('#bouton-theme').addEventListener('click', basculerTheme);
+  $('#etat').addEventListener('click', actualiser);
+
+  /* téléphone : la loupe déplie la recherche sur toute la barre, elle se replie quand on la quitte vide */
+  const enveloppe = $('#form-recherche'), etroit = matchMedia('(max-width: 700px)');
+  const deplier = () => { if (etroit.matches && !enveloppe.classList.contains('ouverte')) { enveloppe.classList.add('ouverte'); $('#recherche').focus(); } };
+  enveloppe.querySelector('.recherche').addEventListener('click', deplier);
+  $('#recherche').addEventListener('blur', () => setTimeout(() => {
+    if (!$('#recherche').value && !enveloppe.contains(document.activeElement)) enveloppe.classList.remove('ouverte');
+  }, 150));
 
   const champ = $('#recherche');
   champ.addEventListener('input', montrerSuggestions);
@@ -214,8 +278,8 @@ function brancher() {
   });
   $('#visionneuse').addEventListener('click', () => { $('#visionneuse').hidden = true; });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { $('#visionneuse').hidden = true; document.body.classList.remove('menu-ouvert'); }
-    if (e.key === '/' && !e.target.closest('input, textarea, [contenteditable]')) { e.preventDefault(); champ.focus(); }
+    if (e.key === 'Escape') { $('#visionneuse').hidden = true; if (document.body.classList.contains('menu-ouvert')) ouvrirMenu(false); }
+    if (e.key === '/' && !e.target.closest('input, textarea, [contenteditable]')) { e.preventDefault(); deplier(); champ.focus(); }
   });
 
   document.addEventListener('visibilitychange', () => {
@@ -223,7 +287,6 @@ function brancher() {
     if (document.visibilityState === 'visible' && d && Date.now() - d.derniereSync > 30000) d.synchroniser().catch(() => {});
   });
   window.addEventListener('online', () => app.depot?.synchroniser().catch(() => {}));
-  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => appliquerTheme(reglages().theme));
 }
 
 function serviceWorker() {
@@ -243,6 +306,7 @@ function serviceWorker() {
 }
 
 appliquerTheme(reglages().theme);
+majBoutonTheme();
 brancher();
 serviceWorker();
 demarrerDepot();

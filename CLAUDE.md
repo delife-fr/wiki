@@ -8,6 +8,7 @@ Appli wiki personnelle façon Wikipédia. Ce dépôt (`delife-fr/wiki`) est **pu
 - Les bibliothèques sont dans `vendor/bibliotheques.js`, reconstruit par `outils/vendor/construire.sh` (versions figées dans `outils/vendor/package.json`).
 - Tout HTML issu d'un article passe par `nettoyer()` (DOMPurify) dans `js/rendu.js`. Garder la CSP de `index.html` stricte (`script-src 'self'`, `style-src 'self'` : pas d'attribut `style` dans le HTML généré, utiliser `el.style` ou des classes).
 - À chaque changement livré : incrémenter `VERSION` dans `sw.js` et `js/reglages.js` ; tout nouveau fichier servi doit être ajouté à `FICHIERS` dans `sw.js`.
+- Apparence : même charte que LIFE PANEL (jetons de couleurs, tailles et arrondis en tête de `css/wiki.css`, thème sombre par défaut et clair au choix, cartes, menu dans un volet, logo grimoire sur dégradé bleu-violet, sous-titre « DELIFE »). Garder cette cohérence.
 - Code, noms et commentaires en français (comme LIFE PANEL). Textes de l'interface en français, apostrophes typographiques (’) et guillemets « ».
 - Format des articles compatible Obsidian : titre = nom du fichier, `[[Titre|texte]]`, `![[photo.jpg|légende|300]]`, bloc YAML en tête (`categories`, `aliases`, `image`, `legende`, autres clés → encadré).
 

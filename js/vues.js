@@ -62,7 +62,7 @@ export function vueArticle(main, ctx, titre) {
       ${rendreSommaire(sections)}
       ${page.corps.trim() ? html : `<p class="discret">Cette page est vide. <a href="#/modifier/${encoderTitre(page.titre)}">Écrire son contenu</a>.</p>`}
     </div>
-    ${page.categories.length ? `<div class="categories"><a href="#/special/categories">Catégories</a> : ${page.categories.map(c => `<a href="#/categorie/${encoderTitre(c)}">${esc(c)}</a>`).join('<span class="sep"> · </span>')}</div>` : ''}
+    ${page.categories.length ? `<div class="categories"><a class="etiq" href="#/special/categories">Catégories</a>${page.categories.map(c => `<a class="puce" href="#/categorie/${encoderTitre(c)}">${esc(c)}</a>`).join('')}</div>` : ''}
     ${liees.length ? `<details class="liees"><summary>Pages qui mènent ici (${liees.length})</summary><ul>${liees.map(t => `<li><a href="${esc(lienPage(t))}">${esc(t)}</a></li>`).join('')}</ul></details>` : ''}`;
   finaliser(main, depot, optionsFinaliser(depot));
   return {garderDefilement: false};
@@ -471,7 +471,7 @@ export function vueReglages(main, ctx) {
 
     <h2>Apparence</h2>
     <div class="segments" role="radiogroup" aria-label="Thème">
-      ${[['auto', 'Automatique'], ['clair', 'Clair'], ['sombre', 'Sombre']].map(([v, t]) => `<label><input type="radio" name="theme" value="${v}"${r.theme === v ? ' checked' : ''}> ${t}</label>`).join('')}
+      ${[['sombre', 'Sombre'], ['clair', 'Clair']].map(([v, t]) => `<label><input type="radio" name="theme" value="${v}"${(r.theme === 'clair' ? 'clair' : 'sombre') === v ? ' checked' : ''}><span>${t}</span></label>`).join('')}
     </div>
 
     <h2>Cet appareil</h2>
@@ -512,6 +512,8 @@ export function vueReglages(main, ctx) {
   });
   for (const radio of main.querySelectorAll('input[name="theme"]')) radio.addEventListener('change', () => {
     const nv = {...reglages(), theme: radio.value}; enregistrerReglages(nv); appliquerTheme(nv.theme);
+    const b = document.querySelector('#bouton-theme'), t = nv.theme === 'clair' ? 'Passer au thème sombre' : 'Passer au thème clair';
+    b?.setAttribute('title', t); b?.setAttribute('aria-label', t);
   });
   main.querySelector('#vider').addEventListener('click', async () => {
     if (!confirm('Vider la copie du wiki gardée sur cet appareil ? Elle sera retéléchargée depuis GitHub.')) return;

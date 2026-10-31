@@ -150,7 +150,7 @@ function afficherMedia(el, depot, urlMedia, attente) {
     el.className = 'media lien-fichier'; el.appendChild(a);
     return;
   }
-  el.className = 'media vignette' + (position ? ' ' + position : '') + (legende ? ' avec-legende' : '');
+  el.className = 'media vignette' + (position ? ' ' + (position === 'encadre' ? 'dans-encadre' : position) : '') + (legende ? ' avec-legende' : '');
   const img = document.createElement('img');
   img.alt = legende || nom; img.loading = 'lazy'; img.decoding = 'async';
   if (largeur) el.style.width = Math.min(largeur, 2000) + 'px';

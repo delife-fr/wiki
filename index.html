@@ -1,15 +1,16 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="sombre">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob: data: https:; connect-src 'self' https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#f8f9fa">
+  <meta name="theme-color" content="#1b1b1d">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Wiki">
-  <meta name="description" content="Wiki personnel : le contenu reste dans un dépôt GitHub privé.">
+  <meta name="description" content="Wiki personnel DELIFE : le contenu reste dans un dépôt GitHub privé.">
   <title>Wiki</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icones/favicon.svg" type="image/svg+xml">
@@ -19,55 +20,64 @@
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
-  <header class="entete">
-    <button type="button" id="bouton-menu" aria-label="Menu" aria-controls="menu">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+  <header class="barre">
+    <button type="button" class="rond" id="bouton-menu" aria-label="Ouvrir le menu" aria-controls="menu" aria-expanded="false" title="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/></svg>
     </button>
-    <a class="logo" href="#/" aria-label="Wiki — accueil">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#3366cc"/><path d="M13 19l8.5 27L32 24l10.5 22L51 19" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="nom">Wiki<small>Ma vie</small></span>
+    <a class="marque" href="#/" aria-label="Wiki DELIFE, accueil">
+      <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5v-15A2.5 2.5 0 0 1 7 2h12.5v20H7a2.5 2.5 0 0 1 0-5h12.5"/><path d="M8.5 2v15"/><path d="M14 6l.95 2.55L17.5 9.5l-2.55.95L14 13l-.95-2.55L10.5 9.5l2.55-.95z"/></svg></span>
+      <span class="marque-txt"><strong>Wiki</strong><span>DELIFE</span></span>
     </a>
-    <form id="form-recherche" role="search" autocomplete="off">
-      <svg class="loupe" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <input id="recherche" type="search" placeholder="Rechercher dans le wiki" aria-label="Rechercher dans le wiki" aria-autocomplete="list" aria-controls="suggestions" enterkeyhint="search">
-      <button type="submit">Rechercher</button>
+    <form id="form-recherche" class="recherche-wrap" role="search" autocomplete="off">
+      <label class="recherche">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.6"/><path d="M20 20l-4.3-4.3"/></svg>
+        <input id="recherche" type="search" placeholder="Rechercher…" aria-label="Rechercher dans le wiki" aria-autocomplete="list" aria-controls="suggestions" enterkeyhint="search">
+        <kbd title="Raccourci clavier">/</kbd>
+      </label>
       <ul id="suggestions" role="listbox" hidden></ul>
     </form>
-    <nav class="entete-droite" aria-label="Raccourcis">
-      <a href="#/special/nouvelle">Nouvelle page</a>
-      <a href="#/reglages">Réglages</a>
-    </nav>
+    <button type="button" class="rond" id="bouton-theme" aria-label="Passer au thème clair" title="Passer au thème clair">
+      <svg class="ic-soleil" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2.2M12 19v2.2M2.8 12h2.2M19 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M5.5 18.5l1.6-1.6M16.9 7.1l1.6-1.6"/></svg>
+      <svg class="ic-lune" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.2A8 8 0 1 1 9.8 4a6.4 6.4 0 0 0 10.2 10.2z"/></svg>
+    </button>
+    <a class="rond plus" id="bouton-nouvelle" href="#/special/nouvelle" title="Nouvelle page" aria-label="Nouvelle page">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.6v12.8M5.6 12h12.8"/></svg>
+    </a>
+    <button type="button" class="rond etat" id="etat" data-etat="attente" title="Ouverture…" aria-label="Ouverture…" aria-live="polite"></button>
   </header>
 
-  <div class="page">
-    <nav id="menu" aria-label="Menu principal">
-      <h2>Navigation</h2>
-      <ul>
-        <li><a href="#/">Accueil</a></li>
-        <li><a href="#/special/pages">Toutes les pages</a></li>
-        <li><a href="#/special/categories">Catégories</a></li>
-        <li><a href="#/special/recentes">Modifications récentes</a></li>
-        <li><a href="#/special/hasard">Page au hasard</a></li>
-      </ul>
-      <h2>Contribuer</h2>
-      <ul>
-        <li><a href="#/special/nouvelle">Nouvelle page</a></li>
-        <li><a href="#/special/demandees">Pages demandées</a></li>
-        <li><a href="#/special/orphelines">Pages orphelines</a></li>
-        <li><a href="#/aide">Aide</a></li>
-      </ul>
-      <h2>Wiki</h2>
-      <ul>
-        <li><a href="#/reglages">Réglages</a></li>
-      </ul>
+  <div id="voile"></div>
+  <nav id="menu" class="volet" aria-label="Menu principal">
+    <div class="volet-tete">
+      <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5v-15A2.5 2.5 0 0 1 7 2h12.5v20H7a2.5 2.5 0 0 1 0-5h12.5"/><path d="M8.5 2v15"/><path d="M14 6l.95 2.55L17.5 9.5l-2.55.95L14 13l-.95-2.55L10.5 9.5l2.55-.95z"/></svg></span>
+      <span class="marque-txt"><strong>Wiki</strong><span>DELIFE</span></span>
+      <button type="button" class="icone-btn fermer" id="fermer-menu" aria-label="Fermer le menu" title="Fermer (Échap)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="menu">
+      <a href="#/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.6 12 3.4l9 7.2"/><path d="M5.6 9.4V20.6h12.8V9.4"/></svg>Accueil</a>
+      <a href="#/special/pages"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5v-15A2.5 2.5 0 0 1 7 2h12.5v20H7a2.5 2.5 0 0 1 0-5h12.5"/><path d="M8.5 2v15"/></svg>Toutes les pages</a>
+      <a href="#/special/categories"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12.6V4.8c0-.7.6-1.3 1.3-1.3h7.8l8 8a1.8 1.8 0 0 1 0 2.6l-5.2 5.2a1.8 1.8 0 0 1-2.6 0z"/><circle cx="8.2" cy="8.2" r="1.3"/></svg>Catégories</a>
+      <a href="#/special/recentes"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3 2"/></svg>Modifications récentes</a>
+      <a href="#/special/hasard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7h3c3.5 0 4.5 10 8 10h5"/><path d="M3.5 17h3c1.3 0 2.2-1.3 3-3M14.5 7h5"/><path d="M17 4.5 19.5 7 17 9.5M17 14.5l2.5 2.5-2.5 2.5"/></svg>Page au hasard</a>
+      <a href="#/special/nouvelle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M13.5 3v5.5H19M12 11.5v6M9 14.5h6"/></svg>Nouvelle page</a>
+    </div>
+    <div class="volet-pied">
+      <a href="#/special/demandees"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 14.5l5-5"/><path d="M11 6.3l1.6-1.6a4 4 0 0 1 5.7 5.7L16.7 12M13 17.7l-1.6 1.6a4 4 0 0 1-5.7-5.7L7.3 12"/></svg>Pages demandées</a>
+      <a href="#/special/orphelines"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M13.5 3v5.5H19"/></svg>Pages orphelines</a>
+      <a href="#/aide"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8 1c0 1.7-2.4 2.2-2.4 3.6M12 17v.1"/></svg>Aide</a>
+      <a href="#/reglages"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Réglages</a>
       <div id="statut" role="status" aria-live="polite"></div>
-    </nav>
-    <div id="voile"></div>
+    </div>
+  </nav>
+
+  <div class="page">
     <main id="contenu">
       <noscript><p>Ce wiki a besoin de JavaScript.</p></noscript>
     </main>
   </div>
-  <footer class="pied">Wiki personnel. Le contenu reste dans ton dépôt GitHub privé et sur cet appareil.</footer>
+  <footer class="pied">Wiki DELIFE · le contenu reste dans ton dépôt GitHub privé et sur cet appareil.</footer>
 
   <div id="visionneuse" hidden tabindex="-1" role="dialog" aria-label="Photo en grand"><img alt=""><div class="legende"></div></div>
   <div id="toasts"></div>
