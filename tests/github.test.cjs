@@ -147,7 +147,7 @@ function remplir(gh) {
   // J. hors ligne : lecture depuis l'appareil, publication refusée proprement, brouillon gardé
   gh.horsLigne = true;
   await p.reload();
-  await p.waitForSelector('#statut[data-etat="hors-ligne"]');
+  await p.waitForSelector('#etat[data-etat="hors-ligne"]');
   await p.goto(URL0 + '#/page/Voyage_au_Japon');
   await p.waitForFunction(() => document.querySelector('.media img')?.naturalWidth > 0);
   ok(true, 'hors ligne : article et photo lisibles');

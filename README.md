@@ -1,6 +1,6 @@
-# Wiki
+# Wiki DELIFE
 
-Un wiki personnel dans le style de Wikipédia. L'appli est ici (dépôt public) ; **le contenu est dans un dépôt privé** (`delife-fr/wiki-donnees`) qu'elle lit et modifie avec une clé GitHub gardée dans le navigateur.
+Un wiki personnel : la structure de Wikipédia, l'apparence de LIFE PANEL (thème sombre ou clair). L'appli est ici (dépôt public) ; **le contenu est dans un dépôt privé** (`delife-fr/wiki-donnees`) qu'elle lit et modifie avec une clé GitHub gardée dans le navigateur.
 
 - Une page = un fichier Markdown (`articles/Voyage au Japon.md`), liées par des `[[liens]]`.
 - Liens rouges vers les pages à écrire, « pages qui mènent ici », catégories, encadré d'infos, sommaire, notes de bas de page.

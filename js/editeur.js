@@ -164,7 +164,7 @@ export function vueModifier(main, ctx, titreDemande) {
       const {html, sections} = rendreCorps(p.corps, depot, titre);
       apercu.innerHTML = (p.erreur ? `<div class="alerte">Bloc d’infos illisible : <code>${esc(p.erreur)}</code></div>` : '')
         + rendreEncadre(p, depot) + rendreSommaire(sections) + (html || '<p class="discret">(page vide)</p>')
-        + (p.categories.length ? `<div class="categories">Catégories : ${p.categories.map(esc).join(' · ')}</div>` : '');
+        + (p.categories.length ? `<div class="categories"><span class="etiq">Catégories</span>${p.categories.map(c => `<span class="puce">${esc(c)}</span>`).join('')}</div>` : '');
       finaliser(apercu, depot, {urlMedia: e => urlMedia(depot, e), attente});
     } else zone.focus();
   }
