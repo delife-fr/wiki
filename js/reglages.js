@@ -2,7 +2,7 @@
 
 import {local} from './outils.js';
 
-export const VERSION = '1.1.0';
+export const VERSION = '1.2.0';
 
 const DEFAUT = {mode: null, proprietaire: 'delife-fr', depot: 'wiki-donnees', branche: 'main', jeton: '',
   dossierArticles: 'articles', dossierMedias: 'medias', theme: 'sombre'};

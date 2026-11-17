@@ -10,7 +10,7 @@ SERVEUR=$!
 trap 'kill $SERVEUR 2>/dev/null' EXIT
 sleep 1
 export WIKI_URL="http://127.0.0.1:$PORT/"
-for t in demo github securite hors-ligne; do
+for t in demo github premiere-page securite hors-ligne; do
   echo "=== $t"
   node "$t.test.cjs"
 done
