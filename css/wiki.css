@@ -114,6 +114,9 @@ body.menu-ouvert #voile { opacity: 1; pointer-events: auto; }
 .volet a.actif { background: rgb(var(--sur) / 0.078); color: var(--texte); }
 .volet a svg { color: var(--texte-faible); flex-shrink: 0; }
 .volet a.actif svg { color: var(--i-bleu); }
+/* Life Panel, l'autre appli : sous les entrées du menu, séparée par un trait */
+.volet a.vers-autre { margin-top: 6px; border-top: 1px solid var(--trait-doux); border-radius: 0 0 var(--r4) var(--r4); padding-top: 11px; }
+.volet a.vers-autre .ext { margin-left: auto; }
 .icone-btn { width: 30px; height: 30px; border-radius: var(--r3); border: 0; background: transparent; color: var(--texte-faible); display: inline-grid; place-items: center; flex-shrink: 0; padding: 0; transition: background .15s, color .15s; }
 .icone-btn:hover { background: rgb(var(--sur) / 0.071); color: var(--texte); }
 #statut { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 10px 12px 2px; font-size: var(--t2); color: var(--texte-faible); }

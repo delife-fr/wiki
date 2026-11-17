@@ -223,7 +223,12 @@ function validerRecherche() {
 
 /* ---------------------------------------------------------------- démarrage */
 
+/* Life Panel, l'autre appli de la suite : sur wiki.<domaine>, elle est à panel.<domaine> ; ailleurs (tests, ouverture sur
+   l'appareil), le lien garde son adresse GitHub Pages, qui renvoie vers son domaine. Même onglet : Retour ramène ici. */
+export const adressePanel = (h = location.hostname) => /^wiki\./i.test(h) ? 'https://' + h.replace(/^wiki\./i, 'panel.') + '/' : 'https://delife-fr.github.io/life-panel/';
+
 function brancher() {
+  $('#vers-panel').href = adressePanel();
   window.addEventListener('hashchange', rendreRoute);
   $('#bouton-menu').addEventListener('click', () => ouvrirMenu(!document.body.classList.contains('menu-ouvert')));
   $('#voile').addEventListener('click', () => ouvrirMenu(false));

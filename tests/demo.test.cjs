@@ -161,6 +161,19 @@ const ok = (c, m) => { if (!c) { throw new Error('ÉCHEC : ' + m); } console.log
   ok(!(await p.evaluate(() => document.body.classList.contains('menu-ouvert'))), 'le menu se ferme après un choix');
   await p.goto(URL0 + '#/modifier/Voyages'); await p.waitForTimeout(300);
 
+  // 12. Life Panel, l'autre appli : dans le menu, même onglet, adresse déduite du domaine
+  await p.goto(URL0 + '#/'); await p.waitForTimeout(300);
+  await p.click('#bouton-menu'); await p.waitForTimeout(300);
+  const lien = await p.evaluate(async () => { const a = document.querySelector('#menu a.vers-autre'), m = await import('./js/app.js');
+    return {visible: !!a && a.getBoundingClientRect().width > 0, href: a && a.href, cible: a && a.target, texte: a && a.textContent.trim(),
+      domaine: m.adressePanel('wiki.exemple.fr'), autre: m.adressePanel('127.0.0.1')}; });
+  ok(lien.visible && lien.texte === 'Life Panel' && !lien.cible, 'menu : lien « Life Panel », ouvert dans le même onglet');
+  ok(lien.href === 'https://delife-fr.github.io/life-panel/' && lien.domaine === 'https://panel.exemple.fr/' && lien.autre === lien.href, 'adresse de Life Panel : panel.<domaine> depuis wiki.<domaine>, sinon GitHub Pages');
+  await p.route('https://delife-fr.github.io/life-panel/', r => r.fulfill({contentType: 'text/html', body: '<title>Life Panel</title>'}));
+  await p.click('#menu a.vers-autre'); await p.waitForURL('https://delife-fr.github.io/life-panel/');
+  await p.goBack(); await p.waitForSelector('#bouton-menu');
+  ok(p.url().startsWith(URL0), 'clic : Life Panel s’ouvre, Retour ramène au wiki');
+
   console.log(erreurs.length ? 'ERREURS CONSOLE:\n' + erreurs.join('\n') : '✓ aucune erreur dans la console');
   await b.close();
 })().catch(async e => { console.error(e.message); process.exit(1); });
